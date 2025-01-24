@@ -20,11 +20,12 @@ namespace MudBlazor
         private int _activePanelIndex = 0;
         private int _scrollIndex = 0;
 
+        private ElementReference _tabBar;
+        private ElementReference _tabBarContent;
         private bool _isRendered = false;
         private bool _prevButtonDisabled;
         private bool _nextButtonDisabled;
         private bool _showScrollButtons;
-        private ElementReference _tabsContentSize;
         private double _sliderSize;
         private double _sliderPosition;
         private double _tabBarContentSize;
@@ -190,7 +191,7 @@ namespace MudBlazor
         public RenderFragment? ChildContent { get; set; }
 
         /// <summary>
-        /// This fragment is placed between tabHeader and panels. 
+        /// This fragment is placed between tabHeader and panels.
         /// It can be used to display additional content like an address line in a browser.
         /// The active tab will be the content of this RenderFragement
         /// </summary>
@@ -339,7 +340,8 @@ namespace MudBlazor
             if (firstRender)
             {
                 var items = _panels.Select(x => x.PanelRef).ToList();
-                items.Add(_tabsContentSize);
+                items.Add(_tabBarContent);
+                items.Add(_tabBar);
 
                 if (_activePanelIndex != -1 && _panels.Count > 0)
                     ActivePanel = _panels[_activePanelIndex];
@@ -645,7 +647,7 @@ namespace MudBlazor
         private bool IsSliderPositionDetermined => _activePanelIndex > 0 && _sliderPosition > 0 ||
                                                    _activePanelIndex <= 0;
 
-        private void GetTabBarContentSize() => _tabBarContentSize = GetRelevantSize(_tabsContentSize);
+        private void GetTabBarContentSize() => _tabBarContentSize = GetRelevantSize(_tabBarContent);
 
         private void GetAllTabsSize()
         {
@@ -724,7 +726,7 @@ namespace MudBlazor
             var x = 0D;
             var count = 0;
 
-            var toolbarContentSize = GetRelevantSize(_tabsContentSize);
+            var toolbarContentSize = GetRelevantSize(_tabBarContent);
 
             foreach (var panel in _panels)
             {
